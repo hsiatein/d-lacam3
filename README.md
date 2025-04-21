@@ -40,7 +40,7 @@ The code is written in C++(17).
 First, clone this repo with submodules.
 
 ```sh
-git clone --recursive https://github.com/hsiatein/d-lacam3.git && cd lacam3
+git clone --recursive https://github.com/hsiatein/d-lacam3.git && cd d-lacam3
 ```
 
 Then, build the project.

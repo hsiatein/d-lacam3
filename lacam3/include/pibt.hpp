@@ -41,7 +41,7 @@ struct PIBT {
 
   bool set_new_config(const Config &Q_from, Config &Q_to,
                       const std::vector<int> &order);
-  bool funcPIBT(const int i, const Config &Q_from, Config &Q_to);
+  bool funcPIBT(const int i, const Config &Q_from, Config &Q_to,const int index=-1);
   int is_swap_required_and_possible(const int ai, const Config &Q_from,
                                     Config &Q_to);
   bool is_swap_required(const int pusher, const int puller,

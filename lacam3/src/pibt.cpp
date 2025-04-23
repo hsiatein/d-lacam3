@@ -63,10 +63,10 @@ bool PIBT::set_new_config(const Config &Q_from, Config &Q_to,
   return success;
 }
 
-bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to)
+bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to,const int index)
 {
   const auto K = Q_from[i]->neighbor.size();
-
+  const int current_idx=Q_from[i]->index;
   // exploit scatter data
   Vertex *prioritized_vertex = nullptr;
   if (scatter != nullptr) {
@@ -80,7 +80,10 @@ bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to)
   for (size_t k = 0; k < K; ++k) {
     auto u = Q_from[i]->neighbor[k];
     C_next[i][k] = u;
-    tie_breakers[u->id] = get_random_float(MT);  // set tie-breaker
+    // double break_tie=(occupied_now[u->id]==NO_AGENT&&occupied_next[u->id]==NO_AGENT&&current_idx-index!=u->index-current_idx)?0.0:1.0;
+    double break_tie=(occupied_now[u->id]==NO_AGENT&&occupied_next[u->id]==NO_AGENT)?0.0:1.0;
+    tie_breakers[u->id] = (get_random_float(MT)+break_tie)*0.5;
+    // tie_breakers[u->id] = get_random_float(MT);  // set tie-breaker
   }
   C_next[i][K] = Q_from[i];
 
@@ -132,7 +135,7 @@ bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to)
 
     // priority inheritance
     if (j != NO_AGENT && u != Q_from[i] && Q_to[j] == nullptr &&
-        !funcPIBT(j, Q_from, Q_to))
+        !funcPIBT(j, Q_from, Q_to,current_idx))
       continue;
 
     // success to plan next one step

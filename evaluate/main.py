@@ -19,19 +19,21 @@ mapDict={0:["corners",4],
          14:["Berlin_1_256",1000],
          15:["brc202d",1000],
          16:["den312d",400],
-         17:["maze-32-32-4",300],
+         17:["maze-32-32-4",100],
          18:["maze-128-128-2",300],
          19:["orz900d",1000],
          20:["warehouse-20-40-10-2-1",1000],
          21:["warehouse-20-40-10-2-2",1000]}
 
 Candidates=[8,10,11,12,13,14,15,16,17,18,19,20,21]
-Candidates=[10]
+#Candidates=[12]
 TieBreakers=['0','1','2','3','4']
 
 selected=16
 
 for selected in Candidates:
+    print(mapDict[selected][0])
+    print(mapDict[selected][1])
     costs=[]
     lbs=[]
     ubs=[]
@@ -67,12 +69,15 @@ for selected in Candidates:
     # 绘制柱状图
     plt.bar(x, ubs)
     # 添加标题和标签
-    plt.title(f'{mapDict[selected][0]} , {mapDict[selected][1]}')
+    title=f'{mapDict[selected][0]} , {mapDict[selected][1]}'
+    plt.title(title)
     plt.xlabel('tie breaker')
     plt.ylabel('ub')
     plt.ylim(bottom=1)
     for i in range(len(ubs)):
-        plt.text(i, ubs[i] + 0.1, str(round(ubs[i],3)), ha='center')
+        plt.text(i, ubs[i]+0.01, str(round(ubs[i],4)), ha='center')
+    plt.savefig(f'evaluate/fig/{title}.png')
+    plt.clf()
     # 显示图形
-    plt.show()
+    #plt.show()
     

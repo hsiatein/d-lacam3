@@ -31,7 +31,7 @@ def plot_ub(ubs,title,save_fig=False,show_fig=False):
     for i in range(len(ubs)):
         plt.text(i, ubs[i]+0.01, str(round(ubs[i],4)), ha='center')
     if save_fig:
-        plt.savefig(f'evaluate/fig4/{title}.png')
+        plt.savefig(f'evaluate/fig5/{title}.png')
     # 显示图形
     if show_fig:
         plt.show()

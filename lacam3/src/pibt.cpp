@@ -1,5 +1,7 @@
 #include "../include/pibt.hpp"
 
+int PIBT::TIE_BREAKER=0;
+
 PIBT::PIBT(const Instance *_ins, DistTable *_D, int seed, bool _flg_swap,
            Scatter *_scatter)
     : ins(_ins),
@@ -80,10 +82,23 @@ bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to,const int in
   for (size_t k = 0; k < K; ++k) {
     auto u = Q_from[i]->neighbor[k];
     C_next[i][k] = u;
-    // double break_tie=(occupied_now[u->id]==NO_AGENT&&occupied_next[u->id]==NO_AGENT&&current_idx-index!=u->index-current_idx)?0.0:1.0;
-    double break_tie=(occupied_now[u->id]==NO_AGENT&&occupied_next[u->id]==NO_AGENT)?0.0:1.0;
+    double break_tie=0;
+    switch (PIBT::TIE_BREAKER)
+    {
+    case 1:
+      break_tie=(occupied_now[u->id]==NO_AGENT)?0.0:1.0;
+      break;
+    case 2:
+      break_tie=(occupied_next[u->id]==NO_AGENT)?0.0:1.0;
+      break;
+    case 3:
+      break_tie=(occupied_now[u->id]==NO_AGENT&&occupied_next[u->id]==NO_AGENT)?0.0:1.0;
+      break;
+    case 4:
+      break_tie=(occupied_now[u->id]==NO_AGENT&&occupied_next[u->id]==NO_AGENT&&current_idx-index!=u->index-current_idx)?0.0:1.0;
+      break;
+    }
     tie_breakers[u->id] = (get_random_float(MT)+break_tie)*0.5;
-    // tie_breakers[u->id] = get_random_float(MT);  // set tie-breaker
   }
   C_next[i][K] = Q_from[i];
 

@@ -80,6 +80,12 @@ int main(int argc, char *argv[])
   program.add_argument("--checkpoints-duration")
       .help("for recording")
       .default_value(std::string("5"));
+
+  // new solver parameters 
+  program.add_argument("--tie-breaker")
+      .help("pibt with new tie-breaker\n0.vanilla PIBT\n1.当前没有被占用优先\n2.下一步没有被占用优先\n3.当前与下一步都没有被占用优先\n4.当前与下一步都没有被占用，且与想要占用自身位置的智能体方向不同优先")
+      .default_value(std::string("0"));
+
   try {
     program.parse_known_args(argc, argv);
   } catch (const std::runtime_error &err) {
@@ -131,6 +137,7 @@ int main(int argc, char *argv[])
           : std::stof(program.get<std::string>("recursive-time-limit")) * 1000;
   Planner::CHECKPOINTS_DURATION =
       std::stof(program.get<std::string>("checkpoints-duration")) * 1000;
+  PIBT::TIE_BREAKER=std::stoi(program.get<std::string>("tie-breaker"));
 
   // solve
   const auto deadline = Deadline(time_limit_sec * 1000);

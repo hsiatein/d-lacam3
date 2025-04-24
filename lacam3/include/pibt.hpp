@@ -35,6 +35,9 @@ struct PIBT {
   // scatter
   Scatter *scatter;
 
+  // HyperParameter
+  static int TIE_BREAKER;
+
   PIBT(const Instance *_ins, DistTable *_D, int seed = 0, bool _flg_swap = true,
        Scatter *_scatter = nullptr);
   ~PIBT();

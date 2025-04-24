@@ -8,10 +8,10 @@
 #map=tunnel&&N=4
 #map=lak303d&&N=1000
 #map=random-32-32-10-2&&N=485
-map=random-32-32-10&&N=460
+#map=random-32-32-10&&N=460
 #map=maze-128-128-1&&N=350
-#map=room-64-64-8&&N=1000
+map=room-64-64-8&&N=1000
 #map=w_woundedcoast&&N=1000
 
-build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --no-star
+build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 --no-star
 mapf-visualizer assets/$map.map ./build/result.txt

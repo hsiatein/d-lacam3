@@ -97,9 +97,6 @@ bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to,const int in
     case 4:
       break_tie=(occupied_now[u->id]==NO_AGENT&&occupied_next[u->id]==NO_AGENT&&current_idx-index!=u->index-current_idx)?0.0:1.0;
       break;
-    case 5:
-      break_tie=(occupied_now[u->id]==NO_AGENT&&occupied_next[u->id]==NO_AGENT&&current_idx-index!=u->index-current_idx&&index!=-1)?0.0:1.0;
-      break;
     }
     tie_breakers[u->id] = (get_random_float(MT)+break_tie)*0.5;
   }

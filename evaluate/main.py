@@ -71,6 +71,8 @@ for selected in Candidates:
     plt.xlabel('tie breaker')
     plt.ylabel('ub')
     plt.ylim(bottom=1)
+    for i in range(len(ubs)):
+        plt.text(i, ubs[i] + 0.1, str(round(ubs[i],3)), ha='center')
     # 显示图形
     plt.show()
     

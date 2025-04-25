@@ -1,6 +1,7 @@
 import subprocess
 import re
 import matplotlib.pyplot as plt
+import pandas as pd
 
 def extract_total_cost(log:str):
     match = re.search(r'sum_of_costs:\s*(\d+)\s*\(lb=(\d+),\s*ub=([\d.]+)\)', log)
@@ -37,3 +38,31 @@ def plot_ub(ubs,title,save_fig=False,show_fig=False):
         plt.show()
     plt.clf()
 
+def check_and_add_instance(df, instance_name):
+    # 检查是否存在给定的 instance
+    if instance_name not in df['instance'].values:
+        # 创建一个新的行，所有值初始化为 0
+        new_row = {col: 0 for col in df.columns}
+        new_row['instance'] = instance_name  # 设置 instance 列的值
+        
+        # 使用 pd.concat 添加新行
+        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    return df
+
+def df_add_num(df, instance_name, col_name, num):
+    # 检查列是否存在
+    if col_name in df.columns:
+        # 找到对应的行并增加数值
+        df.loc[df['instance'] == instance_name, col_name] += num
+    else:
+        print(f"Column '{col_name}' does not exist.")
+    return df
+
+def df_set_num(df, instance_name, col_name, num):
+    # 检查列是否存在
+    if col_name in df.columns:
+        # 找到对应的行并增加数值
+        df.loc[df['instance'] == instance_name, col_name] = num
+    else:
+        print(f"Column '{col_name}' does not exist.")
+    return df

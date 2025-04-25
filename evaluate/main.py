@@ -2,6 +2,7 @@ import subprocess
 import utils
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 mapDict={0:["corners",4],
          1:["corners2",5],
@@ -33,12 +34,13 @@ TieBreakers=['0','1','2','3','4']
 
 
 TieBreakers=['0','4']
-selected=20
-num=1000
-seeds=[i for i in range(10)]
+selected=17
+num=200
+seeds_num=10
 average_ubs=np.array([0 for _ in range(len(TieBreakers))])
 fail={'0':0,'4':0}
-for seed in seeds:
+for _ in range(seeds_num):
+    seed=random.randint(0,100000000)
     print(mapDict[selected][0])
     print(num)
     print(seed)
@@ -55,7 +57,6 @@ for seed in seeds:
             '-v', '3',
             '-t', '5',
             '--no-star',
-            '--no-scatter',
             '--tie-breaker',tiebreaker,
             '-s',str(seed),
         ]
@@ -83,9 +84,9 @@ for seed in seeds:
     average_ubs=average_ubs+np.array(ubs)
     title=f'{mapDict[selected][0]} , num = {num} , seed = {seed}'
     utils.plot_ub(ubs,title)
-average_ubs[0]=average_ubs[0]/(len(seeds)-fail["0"])
-average_ubs[1]=average_ubs[1]/(len(seeds)-fail["4"])
-utils.plot_ub(average_ubs,f'{mapDict[selected][0]} , num = {num} , seed = average({len(seeds)})',save_fig=True)
+average_ubs[0]=average_ubs[0]/(seeds_num-fail["0"])
+average_ubs[1]=average_ubs[1]/(seeds_num-fail["4"])
+utils.plot_ub(average_ubs,f'{mapDict[selected][0]} , num = {num} , seed = average({seeds_num})',save_fig=True)
 
 
 # for selected in Candidates:

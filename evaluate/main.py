@@ -34,8 +34,8 @@ TieBreakers=['0','1','2','3','4']
 
 
 TieBreakers=['0','4']
-selected=17
-num=200
+selected=10
+num=460
 seeds_num=10
 average_ubs=np.array([0 for _ in range(len(TieBreakers))])
 fail={'0':0,'4':0}

@@ -23,12 +23,8 @@ bool is_feasible_solution(const Instance &ins, const Solution &solution,
   std::atomic<bool> feasibility(true);
   feasibility.store(true); // 初始化为 true
   std::vector<std::thread> threads;
-  info(0,verbose, "测试多线程开始");
   for (size_t t = 1; t < solution.size(); ++t) {
     threads.emplace_back([&, t]() {
-      try{
-
-      
       for (size_t i = 0; i < ins.N; ++i) {
         if(!feasibility.load()) return;
         auto v_i_from = solution[t - 1][i];
@@ -59,9 +55,6 @@ bool is_feasible_solution(const Instance &ins, const Solution &solution,
           }
         }
       }
-    }catch(...){
-      std::cout<<"xxx"<<std::endl;
-    }
     });
   }
   for (size_t t = 0; t < threads.size(); ++t) {

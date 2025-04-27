@@ -120,22 +120,12 @@ void print_stats(const int verbose, const Deadline *deadline,
 {
   auto ceil = [](float x) { return std::ceil(x * 100) / 100; };
   auto dist_table = DistTable(ins);
-
-  int makespan;
-  int makespan_lb;
-  int sum_of_costs;
-  int sum_of_costs_lb;
-  int sum_of_loss;
-  std::thread t1([&]() { makespan = get_makespan(solution); });
-  std::thread t2([&]() { makespan_lb = get_makespan_lower_bound(ins, dist_table); });
-  std::thread t3([&]() { sum_of_costs = get_sum_of_costs(solution); });
-  std::thread t4([&]() { sum_of_costs_lb = get_sum_of_costs_lower_bound(ins, dist_table); });
-  std::thread t5([&]() { sum_of_loss = get_sum_of_loss(solution); });
-  t1.join();
-  t2.join();
-  t3.join();
-  t4.join();
-  t5.join();
+  
+  int makespan = get_makespan(solution);
+  int makespan_lb = get_makespan_lower_bound(ins, dist_table);
+  int sum_of_costs = get_sum_of_costs(solution);
+  int sum_of_costs_lb = get_sum_of_costs_lower_bound(ins, dist_table);
+  int sum_of_loss = get_sum_of_loss(solution);
 
   info(1, verbose, deadline, "solved", "\tmakespan: ", makespan,
        " (lb=", makespan_lb, ", ub=", ceil((float)makespan / makespan_lb), ")",

@@ -120,11 +120,25 @@ void print_stats(const int verbose, const Deadline *deadline,
 {
   auto ceil = [](float x) { return std::ceil(x * 100) / 100; };
   auto dist_table = DistTable(ins);
-  const auto makespan = get_makespan(solution);
-  const auto makespan_lb = get_makespan_lower_bound(ins, dist_table);
-  const auto sum_of_costs = get_sum_of_costs(solution);
-  const auto sum_of_costs_lb = get_sum_of_costs_lower_bound(ins, dist_table);
+  // const auto makespan = get_makespan(solution);
+  // const auto makespan_lb = get_makespan_lower_bound(ins, dist_table);
+  // const auto sum_of_costs = get_sum_of_costs(solution);
+  // const auto sum_of_costs_lb = get_sum_of_costs_lower_bound(ins, dist_table);
   const auto sum_of_loss = get_sum_of_loss(solution);
+
+  // 启动异步计算
+  auto future_makespan = std::async(std::launch::async, get_makespan, std::ref(solution));
+  auto future_makespan_lb = std::async(std::launch::async, get_makespan_lower_bound, std::ref(ins), std::ref(dist_table));
+  auto future_sum_of_costs = std::async(std::launch::async, get_sum_of_costs, std::ref(solution));
+  auto future_sum_of_costs_lb = std::async(std::launch::async, get_sum_of_costs_lower_bound, std::ref(ins), std::ref(dist_table));
+  //auto future_sum_of_loss = std::async(std::launch::async, get_sum_of_loss, std::ref(solution));
+
+  // 获取结果
+  const auto makespan = future_makespan.get();
+  const auto makespan_lb = future_makespan_lb.get();
+  const auto sum_of_costs = future_sum_of_costs.get();
+  const auto sum_of_costs_lb = future_sum_of_costs_lb.get();
+  //const auto sum_of_loss = future_sum_of_loss.get();
   info(1, verbose, deadline, "solved", "\tmakespan: ", makespan,
        " (lb=", makespan_lb, ", ub=", ceil((float)makespan / makespan_lb), ")",
        "\tsum_of_costs: ", sum_of_costs, " (lb=", sum_of_costs_lb,

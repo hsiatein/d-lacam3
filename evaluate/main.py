@@ -34,9 +34,9 @@ TieBreakers=['0','1','2','3','4']
 
 
 TieBreakers=['0','4']
-selected=10
-num=460
-seeds_num=10
+selected=17
+num=200
+seeds_num=1
 average_ubs=np.array([0 for _ in range(len(TieBreakers))])
 fail={'0':0,'4':0}
 for _ in range(seeds_num):
@@ -53,10 +53,11 @@ for _ in range(seeds_num):
             'build/main',
             '-i', f'assets/{mapDict[selected][0]}.scen',
             '-m', f'assets/{mapDict[selected][0]}.map',
+            '-o', 'log/result.txt',
             '-N', str(num),
             '-v', '3',
             '-t', '5',
-            '--no-star',
+            #'--no-star',
             '--tie-breaker',tiebreaker,
             '-s',str(seed),
         ]

@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Main",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/main",
+            "args": [
+                "-i", "assets/warehouse-20-40-10-2-2.scen",
+                "-m", "assets/warehouse-20-40-10-2-2.map",
+                "-N", "1000",
+                "-v", "3",
+                "--tie-breaker", "0",
+                "-s", "18",
+                "-t", "10",
+                "-o", "log/result.txt",
+                "--no-star",
+                "--no-scatter",
+                "--check-feasibility"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+            ],
+            "externalConsole": true,
+            "MIMode": "lldb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/Users/xiatian/.vscode/extensions/ms-vscode.cpptools-1.24.5-darwin-arm64/debugAdapters/lldb-mi/bin/lldb-mi"
+        }
+    ],
+}

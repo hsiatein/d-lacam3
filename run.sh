@@ -16,5 +16,5 @@ map=warehouse-20-40-10-2-2&&N=10000
 
 
 #build/main -i assets/maze-128-128-1.scen -m assets/maze-128-128-1.map -N 350 -v 3 --tie-breaker 0 -s 4 -t 5 --no-star
-build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s 18 -t 10 -o log/result.txt --no-star --no-scatter #--check-feasibility
+build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s 18 -t 10 -o log/result.txt --no-star --no-scatter --check-feasibility
 mapf-visualizer assets/$map.map log/result.txt

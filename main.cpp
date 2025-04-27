@@ -85,6 +85,10 @@ int main(int argc, char *argv[])
   program.add_argument("--tie-breaker")
       .help("pibt with new tie-breaker\n0.vanilla PIBT\n1.当前没有被占用优先\n2.下一步没有被占用优先\n3.当前与下一步都没有被占用优先\n4.当前与下一步都没有被占用，且与想要占用自身位置的智能体方向不同优先")
       .default_value(std::string("0"));
+  program.add_argument("--check-feasibility")
+      .help("check feasibility of solution")
+      .default_value(false)
+      .implicit_value(true);
 
   try {
     program.parse_known_args(argc, argv);
@@ -106,6 +110,7 @@ int main(int argc, char *argv[])
   const auto N = std::stoi(program.get<std::string>("num"));
   const auto ins = scen_name.size() > 0 ? Instance(scen_name, map_name, N)
                                         : Instance(map_name, N, seed);
+  const auto check_feasibility = program.get<bool>("check-feasibility");
   if (!ins.is_valid(1)) return 1;
 
   // solver parameters
@@ -147,10 +152,14 @@ int main(int argc, char *argv[])
   // failure
   if (solution.empty()) info(1, verbose, &deadline, "failed to solve");
 
-  // check feasibility
-  if (!is_feasible_solution(ins, solution, verbose)) {
+  if(check_feasibility){
+    info(3, verbose, &deadline, "start check feasibility");
+    // check feasibility
+    if (!is_feasible_solution(ins, solution, verbose)) {
     info(0, verbose, &deadline, "invalid solution");
     return 1;
+    }
+    info(3, verbose, &deadline, "complete check feasibility");
   }
 
   // post processing

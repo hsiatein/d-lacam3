@@ -12,6 +12,7 @@
 #include "instance.hpp"
 #include "scatter.hpp"
 #include "utils.hpp"
+#include "lnode.hpp"
 
 struct PIBT {
   const Instance *ins;
@@ -37,6 +38,7 @@ struct PIBT {
 
   // HyperParameter
   static int TIE_BREAKER;
+  LNode* L; // 测试用
 
   PIBT(const Instance *_ins, DistTable *_D, int seed = 0, bool _flg_swap = true,
        Scatter *_scatter = nullptr);

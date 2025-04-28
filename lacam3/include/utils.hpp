@@ -22,6 +22,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <atomic>
 
 using Time = std::chrono::steady_clock;
 

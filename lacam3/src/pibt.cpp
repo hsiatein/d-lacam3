@@ -63,7 +63,7 @@ bool PIBT::set_new_config(const Config &Q_from, Config &Q_to,
     for (auto i : order) {
       if (Q_to[i] == nullptr && !funcPIBT(i, Q_from, Q_to)) {
         success = false;
-        runtime_log(3,"PIBT生成失败");
+        runtime_log(3,"PIBT生成失败:",i);
         break;
       }
     }

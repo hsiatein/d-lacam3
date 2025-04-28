@@ -134,3 +134,9 @@ ctest --test-dir ./build
 - The grid maps and scenarios files are (mostly) from [MAPF benchmarks](https://movingai.com/benchmarks/mapf.html), with some original ones.
   They are placed in `./scripts/map` and `./scripts/scen`.
 - lacam4? I do not have such a plan currently...
+
+## 新增
+加入了python的测试脚本
+修改了PIBT的break tie实现，进行了测试
+修改了低级节点的生成，在pop时会检查是不是有冲突，如果是则不生成余下节点，且跳过此次
+加入了runtime_log机制用来调试

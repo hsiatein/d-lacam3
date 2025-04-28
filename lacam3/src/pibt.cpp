@@ -26,31 +26,34 @@ bool PIBT::set_new_config(const Config &Q_from, Config &Q_to,
 {
   bool success = true;
   // setup cache & constraints check
-  for (auto i = 0; i < N; ++i) {
-    // set occupied now
-    occupied_now[Q_from[i]->id] = i;
+  // for (auto i = 0; i < N; ++i) {
+  //   // set occupied now
+  //   occupied_now[Q_from[i]->id] = i;
 
-    // set occupied next
-    if (Q_to[i] != nullptr) {
-      // vertex collision
-      if (occupied_next[Q_to[i]->id] != NO_AGENT) {
-        success = false;
-        break;
-      }
-      // swap collision
-      auto j = occupied_now[Q_to[i]->id];
-      if (j != NO_AGENT && j != i && Q_to[j] == Q_from[i]) {
-        success = false;
-        break;
-      }
-      occupied_next[Q_to[i]->id] = i;
-    }
-  }
+  //   // set occupied next
+  //   if (Q_to[i] != nullptr) {
+  //     // vertex collision
+  //     if (occupied_next[Q_to[i]->id] != NO_AGENT) {
+  //       success = false;
+  //       runtime_log(3,"约束互相冲突:顶点");
+  //       break;
+  //     }
+  //     // swap collision
+  //     auto j = occupied_now[Q_to[i]->id];
+  //     if (j != NO_AGENT && j != i && Q_to[j] == Q_from[i]) {
+  //       success = false;
+  //       runtime_log(3,"约束互相冲突:交换");
+  //       break;
+  //     }
+  //     occupied_next[Q_to[i]->id] = i;
+  //   }
+  // }
 
   if (success) {
     for (auto i : order) {
       if (Q_to[i] == nullptr && !funcPIBT(i, Q_from, Q_to)) {
         success = false;
+        runtime_log(3,"PIBT生成失败");
         break;
       }
     }

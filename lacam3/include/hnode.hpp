@@ -35,6 +35,7 @@ struct HNode {
   ~HNode();
 
   LNode *get_next_lowlevel_node(std::mt19937 &MT);
+  void check_lowlevel_feasibility(LNode *L);
 };
 using HNodes = std::vector<HNode *>;
 

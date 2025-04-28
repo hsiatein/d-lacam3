@@ -1,6 +1,10 @@
 #include "../include/utils.hpp"
 
+std::ofstream runtime_log_stream;
+int runtime_log_verbose=3;
+
 void info(const int level, const int verbose) { std::cout << std::endl; }
+void runtime_log(const int level) { runtime_log_stream << std::endl; }
 
 Deadline::Deadline(double _time_limit_ms)
     : t_s(Time::now()), time_limit_ms(_time_limit_ms)

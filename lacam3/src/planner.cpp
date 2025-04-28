@@ -73,6 +73,7 @@ Solution Planner::solve()
   // search loop
   while (!OPEN.empty() && !is_expired(deadline)) {
     search_iter += 1;
+    runtime_log(3,deadline,"search iteration",search_iter);
     update_checkpoints();
 
     // check pooled procedures
@@ -99,6 +100,7 @@ Solution Planner::solve()
     // check lower bounds
     if (H_goal != nullptr && H->f >= H_goal->f) {
       OPEN.pop_front();
+      runtime_log(3,deadline,"代价过高弹出");
       continue;
     }
 
@@ -117,6 +119,11 @@ Solution Planner::solve()
     auto L = H->get_next_lowlevel_node(MT);
     if (L == nullptr) {
       OPEN.pop_front();
+      runtime_log(3,deadline,"没有LowLevel弹出");
+      continue;
+    }
+    if(!(L->feasibility)){
+      delete L;
       continue;
     }
 
@@ -243,6 +250,7 @@ bool Planner::set_new_config(HNode *H, LNode *L, Config &Q_to)
     std::copy(Q_win.begin(), Q_win.end(), Q_to.begin());
     return true;
   } else {
+    runtime_log(3,deadline,"配置生成失败");
     return false;
   }
 }

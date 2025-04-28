@@ -50,6 +50,11 @@ void info(const int level, const int verbose, Head &&head, Tail &&...tail);
 void info(const int level, const int verbose);
 
 template <typename Head, typename... Tail>
+void runtime_log(const int level, Head &&head, Tail &&...tail);
+
+void runtime_log(const int level);
+
+template <typename Head, typename... Tail>
 void info(const int level, const int verbose, Head &&head, Tail &&...tail)
 {
   if (verbose < level) return;
@@ -69,3 +74,23 @@ void info(const int level, const int verbose, const Deadline *deadline,
 std::ostream &operator<<(std::ostream &os, const std::vector<int> &arr);
 std::ostream &operator<<(std::ostream &os, const std::list<int> &arr);
 std::ostream &operator<<(std::ostream &os, const std::set<int> &arr);
+
+extern std::ofstream runtime_log_stream;
+extern int runtime_log_verbose;
+
+template <typename Head, typename... Tail>
+void runtime_log(const int level, Head &&head, Tail &&...tail)
+{
+  if (runtime_log_verbose < level) return;
+  runtime_log_stream << head;
+  runtime_log(level, std::forward<Tail>(tail)...);
+}
+
+template <typename... Body>
+void runtime_log(const int level, const Deadline *deadline,
+          Body &&...body)
+{
+  if (runtime_log_verbose < level) return;
+  runtime_log_stream << "elapsed:" << std::setw(6) << elapsed_ms(deadline) << "ms  ";
+  runtime_log(level, (body)...);
+}

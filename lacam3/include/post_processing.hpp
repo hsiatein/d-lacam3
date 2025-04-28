@@ -7,7 +7,6 @@
 #include "metrics.hpp"
 #include "utils.hpp"
 #include <atomic>
-#include <future>
 
 bool is_feasible_solution(const Instance &ins, const Solution &solution,
                           const int verbose = 0);

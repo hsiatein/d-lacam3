@@ -11,6 +11,7 @@ struct LNode {
 
   std::vector<int> who;
   Vertices where;
+  bool feasibility;
   const int depth;
   LNode();
   LNode(LNode *parent, int i, Vertex *v);  // who and where

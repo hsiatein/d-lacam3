@@ -55,13 +55,34 @@ HNode::~HNode()
   }
 }
 
+void HNode::check_lowlevel_feasibility(LNode *L){
+  if(L->who.size()==0) return;
+  std::set<int> occupiedVertices;
+  std::set<std::array<int,2>> occupiedEdges;
+  for (auto d = 0; d < L->depth; ++d){
+    if(occupiedVertices.find(L->where[d]->id)==occupiedVertices.end()) occupiedVertices.insert(L->where[d]->id);
+    else{
+      L->feasibility=false;
+      return;
+    }
+    if(occupiedEdges.find(std::array<int,2> {this->C[L->who[d]]->id,L->where[d]->id})==occupiedEdges.end()) occupiedEdges.insert({L->where[d]->id,this->C[L->who[d]]->id});
+    else{
+      //runtime_log(3,"约束有交换冲突");
+      L->feasibility=false;
+      return;
+    }
+  }
+}
+
 LNode *HNode::get_next_lowlevel_node(std::mt19937 &MT)
 {
   if (search_tree.empty()) return nullptr;
 
   auto L = search_tree.front();
   search_tree.pop();
-  if (L->depth < C.size()) {
+  check_lowlevel_feasibility(L);
+
+  if (L->feasibility && L->depth < C.size()) {
     auto i = order[L->depth];
     auto cands = C[i]->neighbor;
     cands.push_back(C[i]);

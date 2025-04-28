@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
       .default_value(std::string("3"));
   program.add_argument("-o", "--output")
       .help("output file")
-      .default_value(std::string("./build/result.txt"));
+      .default_value(std::string("./log/result.txt"));
   program.add_argument("-l", "--log_short")
       .default_value(false)
       .implicit_value(true);
@@ -89,6 +89,12 @@ int main(int argc, char *argv[])
       .help("check feasibility of solution")
       .default_value(false)
       .implicit_value(true);
+  program.add_argument("--runtime-log")
+      .help("runtime log filename")
+      .default_value(std::string("./log/log.txt"));
+  program.add_argument("--runtime-log-verbose")
+      .help("verbose about runtime log")
+      .default_value(std::string("3"));
 
   try {
     program.parse_known_args(argc, argv);
@@ -142,7 +148,14 @@ int main(int argc, char *argv[])
           : std::stof(program.get<std::string>("recursive-time-limit")) * 1000;
   Planner::CHECKPOINTS_DURATION =
       std::stof(program.get<std::string>("checkpoints-duration")) * 1000;
+
+  // parse new parameters
   PIBT::TIE_BREAKER=std::stoi(program.get<std::string>("tie-breaker"));
+  const auto runtime_log_name = program.get<std::string>("runtime-log");
+  runtime_log_verbose = std::stoi(program.get<std::string>("runtime-log-verbose"));
+
+
+  runtime_log_stream.open(runtime_log_name, std::ios::out);
 
   // solve
   const auto deadline = Deadline(time_limit_sec * 1000);
@@ -161,10 +174,10 @@ int main(int argc, char *argv[])
     }
     info(3, verbose, &deadline, "complete check feasibility");
   }
-
   // post processing
   print_stats(verbose, &deadline, ins, solution, comp_time_ms);
   make_log(ins, solution, output_name, comp_time_ms, map_name, seed, log_short);
   info(3, verbose, &deadline, "complete log");
+  runtime_log_stream.close();
   return 0;
 }

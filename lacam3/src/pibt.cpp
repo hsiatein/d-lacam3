@@ -26,6 +26,16 @@ bool PIBT::set_new_config(const Config &Q_from, Config &Q_to,
 {
   bool success = true;
   // setup cache & constraints check
+  for (auto i = 0; i < N; ++i) {
+    // set occupied now
+    occupied_now[Q_from[i]->id] = i;
+
+    // set occupied next
+    if (Q_to[i] != nullptr) {
+      occupied_next[Q_to[i]->id] = i;
+    }
+  }
+
   // for (auto i = 0; i < N; ++i) {
   //   // set occupied now
   //   occupied_now[Q_from[i]->id] = i;

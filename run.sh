@@ -14,7 +14,12 @@
 #map=w_woundedcoast&&N=1000
 #map=warehouse-20-40-10-2-2&&N=1000
 
+# seed0=20
+# for ((seed = $seed0; seed < $seed0 + 10; seed++)); do
+#     echo $seed
+#     build/main -i assets/maze-128-128-1.scen -m assets/maze-128-128-1.map -N 350 -v 3 --tie-breaker 0 -s $seed -t 5 --no-star --check-feasibility
+# done
 
-build/main -i assets/maze-128-128-1.scen -m assets/maze-128-128-1.map -N 350 -v 3 --tie-breaker 0 -s 19 -t 5 --no-star --check-feasibility
+build/main -i assets/maze-128-128-1.scen -m assets/maze-128-128-1.map -N 350 -v 3 --tie-breaker 0 -s 24 -t 5 --no-star --check-feasibility
 #build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s 18 -t 10 -o log/result.txt --no-star --no-scatter #--check-feasibility
-mapf-visualizer assets/$map.map log/result.txt
+#mapf-visualizer assets/$map.map log/result.txt

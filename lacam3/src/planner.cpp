@@ -116,7 +116,7 @@ Solution Planner::solve()
     }
 
     // low level search
-    auto L = H->get_next_lowlevel_node(MT);
+    auto L = H->get_next_lowlevel_node();
     if (L == nullptr) {
       OPEN.pop_front();
       runtime_log(3,deadline,"没有LowLevel弹出");
@@ -130,6 +130,8 @@ Solution Planner::solve()
     // create successors at the high-level search
     auto Q_to = Config(N, nullptr);
     auto res = set_new_config(H, L, Q_to);
+    // 生成配置后知道L有没有可行性再生成约束
+    H->generate_lowlevel_node(MT,L);
     delete L;
     if (!res) continue;
 
@@ -217,12 +219,12 @@ bool Planner::set_new_config(HNode *H, LNode *L, Config &Q_to)
   // worker-id, time -> configuration
   auto Q_cands = std::vector<Config>(PIBT_NUM, Config(N, nullptr));
   auto f_vals = std::vector<int>(PIBT_NUM, INT_MAX);
-
   // parallel
   auto worker = [&](int k) {
     // set constraints
     for (auto d = 0; d < L->depth; ++d) Q_cands[k][L->who[d]] = L->where[d];
     // PIBT
+    pibts[k]->L=L; // 测试用
     auto res = pibts[k]->set_new_config(H->C, Q_cands[k], H->order);
     if (res)
       f_vals[k] = get_edge_cost(H->C, Q_cands[k]) + heuristic->get(Q_cands[k]);

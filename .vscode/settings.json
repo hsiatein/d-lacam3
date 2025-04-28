@@ -89,6 +89,8 @@
         "print": "cpp",
         "queue": "cpp",
         "stack": "cpp",
-        "__bits": "cpp"
+        "__bits": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp"
     }
 }

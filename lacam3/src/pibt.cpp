@@ -145,35 +145,60 @@ bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to,const int in
     }
   };
 
+  std::string log_content="";
+  bool L_discard=(index==-1);
   // main loop
   for (size_t k = 0; k < K + 1; ++k) {
     auto u = C_next[i][k];
 
     // avoid vertex conflicts
-    if (occupied_next[u->id] != NO_AGENT) continue;
+    if (occupied_next[u->id] != NO_AGENT)
+    {
+      log_content=log_content+"vertex conflicts  "; //测试用
+      if(find(L->who.begin(),L->who.end(),occupied_next[u->id])!=L->who.end()){
+        L_discard=L_discard && true;
+        log_content=log_content+"<C>  "; //测试用
+      }
+      else L_discard=false;
+      continue;
+    }
 
     const auto j = occupied_now[u->id];
 
     // avoid swap conflicts with constraints
-    if (j != NO_AGENT && Q_to[j] == Q_from[i]) continue;
-
+    if (j != NO_AGENT && Q_to[j] == Q_from[i])
+    {
+      log_content=log_content+"swap conflicts  "; //测试用
+      if(find(L->who.begin(),L->who.end(),j)!=L->who.end()){
+        L_discard=L_discard && true;
+        log_content=log_content+"<C>  "; //测试用
+      }
+      else L_discard=false;
+      continue;
+    }
     // reserve next location
     occupied_next[u->id] = i;
     Q_to[i] = u;
 
     // priority inheritance
     if (j != NO_AGENT && u != Q_from[i] && Q_to[j] == nullptr &&
-        !funcPIBT(j, Q_from, Q_to,current_idx))
-      continue;
+        !funcPIBT(j, Q_from, Q_to, current_idx))
+      {
+        log_content=log_content+"PIBT fail  "; //测试用
+        continue;
+      }
 
     // success to plan next one step
     if (flg_swap && k == 0) swap_operation();
+    L_discard=false;
     return true;
   }
 
   // failed to secure node
   occupied_next[Q_from[i]->id] = i;
   Q_to[i] = Q_from[i];
+  if(index==-1) runtime_log(3,log_content); //测试用
+  if(L_discard) L->feasibility.store(false);
   return false;
 }
 

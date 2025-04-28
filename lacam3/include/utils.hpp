@@ -95,3 +95,5 @@ void runtime_log(const int level, const Deadline *deadline,
   runtime_log_stream << "elapsed:" << std::setw(6) << elapsed_ms(deadline) << "ms  ";
   runtime_log(level, (body)...);
 }
+
+extern bool cut_constraint;

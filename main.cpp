@@ -95,6 +95,10 @@ int main(int argc, char *argv[])
   program.add_argument("--runtime-log-verbose")
       .help("verbose about runtime log")
       .default_value(std::string("3"));
+  program.add_argument("--cut-constraint")
+      .help("cut invalid constraint")
+      .default_value(false)
+      .implicit_value(true);
 
   try {
     program.parse_known_args(argc, argv);
@@ -116,7 +120,6 @@ int main(int argc, char *argv[])
   const auto N = std::stoi(program.get<std::string>("num"));
   const auto ins = scen_name.size() > 0 ? Instance(scen_name, map_name, N)
                                         : Instance(map_name, N, seed);
-  const auto check_feasibility = program.get<bool>("check-feasibility");
   if (!ins.is_valid(1)) return 1;
 
   // solver parameters
@@ -153,6 +156,8 @@ int main(int argc, char *argv[])
   PIBT::TIE_BREAKER=std::stoi(program.get<std::string>("tie-breaker"));
   const auto runtime_log_name = program.get<std::string>("runtime-log");
   runtime_log_verbose = std::stoi(program.get<std::string>("runtime-log-verbose"));
+  const auto check_feasibility = program.get<bool>("check-feasibility");
+  cut_constraint = program.get<bool>("cut-constraint");
 
 
   runtime_log_stream.open(runtime_log_name, std::ios::out);

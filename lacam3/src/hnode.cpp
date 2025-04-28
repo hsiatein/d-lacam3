@@ -74,21 +74,21 @@ void HNode::check_lowlevel_feasibility(LNode *L){
   }
 }
 
-LNode *HNode::get_next_lowlevel_node()
+LNode *HNode::get_next_lowlevel_node(std::mt19937 &MT)
 {
   if (search_tree.empty()) return nullptr;
 
   auto L = search_tree.front();
   search_tree.pop();
   check_lowlevel_feasibility(L);
-
-  // if (L->feasibility && L->depth < C.size()) {
-  //   auto i = order[L->depth];
-  //   auto cands = C[i]->neighbor;
-  //   cands.push_back(C[i]);
-  //   std::shuffle(cands.begin(), cands.end(), MT);  // randomize
-  //   for (auto u : cands) search_tree.push(new LNode(L, i, u));
-  // }
+  if(cut_constraint) return L;
+  if (L->feasibility && L->depth < C.size()) {
+    auto i = order[L->depth];
+    auto cands = C[i]->neighbor;
+    cands.push_back(C[i]);
+    std::shuffle(cands.begin(), cands.end(), MT);  // randomize
+    for (auto u : cands) search_tree.push(new LNode(L, i, u));
+  }
   return L;
 }
 

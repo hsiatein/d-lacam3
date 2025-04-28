@@ -116,13 +116,13 @@ Solution Planner::solve()
     }
 
     // low level search
-    auto L = H->get_next_lowlevel_node();
+    auto L = H->get_next_lowlevel_node(MT);
     if (L == nullptr) {
       OPEN.pop_front();
       runtime_log(3,deadline,"没有LowLevel弹出");
       continue;
     }
-    if(!(L->feasibility)){
+    if(cut_constraint && !(L->feasibility)){
       delete L;
       continue;
     }
@@ -130,8 +130,8 @@ Solution Planner::solve()
     // create successors at the high-level search
     auto Q_to = Config(N, nullptr);
     auto res = set_new_config(H, L, Q_to);
-    // 生成配置后知道L有没有可行性再生成约束
-    H->generate_lowlevel_node(MT,L);
+    // 如果cut_constraint，生成配置后知道L有没有可行性再生成约束
+    if(cut_constraint) H->generate_lowlevel_node(MT,L);
     delete L;
     if (!res) continue;
 

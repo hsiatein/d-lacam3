@@ -2,6 +2,7 @@
 
 std::ofstream runtime_log_stream;
 int runtime_log_verbose=3;
+bool cut_constraint=false;
 
 void info(const int level, const int verbose) { std::cout << std::endl; }
 void runtime_log(const int level) { runtime_log_stream << std::endl; }

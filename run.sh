@@ -17,7 +17,7 @@
 seed0=100
 for ((seed = $seed0; seed < $seed0 + 10; seed++)); do
     echo $seed
-    build/main -i assets/maze-128-128-1.scen -m assets/maze-128-128-1.map -N 350 -v 3 --tie-breaker 0 -s $seed -t 5 --no-star --check-feasibility --runtime-log-verbose 0
+    build/main -i assets/maze-128-128-1.scen -m assets/maze-128-128-1.map -N 350 -v 3 --tie-breaker 0 -s $seed -t 5 --no-star --check-feasibility --runtime-log-verbose 3 --cut-constraint
 done
 
 #build/main -i assets/maze-128-128-1.scen -m assets/maze-128-128-1.map -N 350 -v 3 --tie-breaker 0 -s 34 -t 5 --no-star --check-feasibility --runtime-log-verbose 3

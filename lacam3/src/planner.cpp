@@ -117,7 +117,7 @@ Solution Planner::solve()
 
     // low level search
     LNode *L;
-    if(flg_cut_constraint){
+    if(cut_constraint_level>0){
       L=H->get_next_lowlevel_node_without_generate();
     }
     else{
@@ -134,7 +134,7 @@ Solution Planner::solve()
     auto Q_to = Config(N, nullptr);
     auto res = set_new_config(H, L, Q_to);
     // 如果cut_constraint，生成配置后知道L有没有可行性再生成约束
-    if(flg_cut_constraint) H->generate_lowlevel_node(MT,L);
+    if(cut_constraint_level>0) H->generate_lowlevel_node(MT,L);
     delete L;
     if (!res){
       generate_fail_continue_num++;
@@ -394,7 +394,7 @@ void Planner::logging()
   } else {
     info(1, verbose, deadline, "timeout");
   }
-  if(flg_cut_constraint) info(1, verbose, deadline, "search iteration:", search_iter,
+  if(cut_constraint_level>0) info(1, verbose, deadline, "search iteration:", search_iter,
        "\texplored:", EXPLORED.size(), "\tdiscard:", discard_constraint_num,"\tgenerate fail continue:",generate_fail_continue_num,"\texplored continue:",explored_continue_num);
   else info(1, verbose, deadline, "search iteration:", search_iter,
     "\texplored:", EXPLORED.size(),"\tgenerate fail continue:",generate_fail_continue_num,"\texplored continue:",explored_continue_num);

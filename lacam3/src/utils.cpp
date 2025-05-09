@@ -2,7 +2,7 @@
 
 std::ofstream runtime_log_stream;
 int runtime_log_verbose=3;
-bool flg_cut_constraint=false;
+int cut_constraint_level=0;
 int discard_constraint_num=0;
 int generate_fail_continue_num=0;
 int explored_continue_num=0;

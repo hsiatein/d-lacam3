@@ -96,9 +96,8 @@ int main(int argc, char *argv[])
       .help("verbose about runtime log")
       .default_value(std::string("3"));
   program.add_argument("--cut-constraint")
-      .help("cut invalid constraint")
-      .default_value(false)
-      .implicit_value(true);
+      .help("level of cut invalid constraint, 0表示不剪枝, 1表示只剪枝约束直接导致的冲突, 2表示在1基础上剪枝一步间接导致的冲突")
+      .default_value(std::string("0"));
 
   try {
     program.parse_known_args(argc, argv);
@@ -157,7 +156,7 @@ int main(int argc, char *argv[])
   const auto runtime_log_name = program.get<std::string>("runtime-log");
   runtime_log_verbose = std::stoi(program.get<std::string>("runtime-log-verbose"));
   const auto check_feasibility = program.get<bool>("check-feasibility");
-  flg_cut_constraint = program.get<bool>("cut-constraint");
+  cut_constraint_level = std::stoi(program.get<std::string>("cut-constraint"));
 
 
   runtime_log_stream.open(runtime_log_name, std::ios::out);

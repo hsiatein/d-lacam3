@@ -26,7 +26,8 @@ map=maze-128-128-1&&N=400
 # done
 
 #build/main -i assets/maze-128-128-1.scen -m assets/maze-128-128-1.map -N 450 -v 3 --tie-breaker 4 -s 0 -t 10 --cut-constraint #--no-star --check-feasibility --runtime-log-verbose 3
-seed=17 #72804709
-build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 5 -o log/result.txt --no-scatter --cut-constraint --no-star
+seed=14 #72804709
+build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 5 -o log/result.txt --no-scatter --cut-constraint 2 --no-star
+build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 5 -o log/result.txt --no-scatter --cut-constraint 1 --no-star
 build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 5 -o log/result.txt --no-scatter --no-star
 #mapf-visualizer assets/$map.map log/result.txt

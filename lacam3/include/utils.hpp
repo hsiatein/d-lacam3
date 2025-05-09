@@ -96,4 +96,7 @@ void runtime_log(const int level, const Deadline *deadline,
   runtime_log(level, (body)...);
 }
 
-extern bool cut_constraint;
+extern bool flg_cut_constraint;
+extern int discard_constraint_num;
+extern int generate_fail_continue_num;
+extern int explored_continue_num;

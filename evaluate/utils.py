@@ -12,6 +12,22 @@ def extract_total_cost(log:str):
         ub = sum_of_costs/lb
     return sum_of_costs,lb,ub
 
+def extract_runtime(log:str):
+    regex=""
+    if("failed to solve" in log):
+        regex = r"elapsed:\s*(\d+)ms\s*failed\sto\ssolve"
+    else:
+        regex = r"elapsed:\s*(\d+)ms\s*found\sinitial\ssolution"
+    match = re.search(regex, log)
+    runtime = float(match.group(1))
+    return runtime
+
+def extract_runtime(log:str):
+    match = re.search(r"elapsed:\s*(\d+)ms\s*found\sinitial\ssolution", log)
+    runtime = float(match.group(1))
+    return runtime
+
+
 def visualize(map:str):
     visualize = [
         'mapf-visualizer',

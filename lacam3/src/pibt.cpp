@@ -32,7 +32,7 @@ bool PIBT::set_new_config(const Config &Q_from, Config &Q_to,
 
     // set occupied next
     if (Q_to[i] != nullptr) {
-      if(!cut_constraint){
+      if(!flg_cut_constraint){
         // vertex collision
         if (occupied_next[Q_to[i]->id] != NO_AGENT) {
           success = false;
@@ -147,7 +147,7 @@ bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to,const int in
     // avoid vertex conflicts
     if (occupied_next[u->id] != NO_AGENT)
     {
-      if(!cut_constraint) continue;
+      if(!flg_cut_constraint && L_discard) continue;
       log_content=log_content+"vertex conflicts  "; //测试用
       if(find(L->who.begin(),L->who.end(),occupied_next[u->id])!=L->who.end()){
         L_discard=L_discard && true;
@@ -162,7 +162,7 @@ bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to,const int in
     // avoid swap conflicts with constraints
     if (j != NO_AGENT && Q_to[j] == Q_from[i])
     {
-      if(!cut_constraint) continue;
+      if(!flg_cut_constraint && L_discard) continue;
       log_content=log_content+"swap conflicts  "; //测试用
       if(find(L->who.begin(),L->who.end(),j)!=L->who.end()){
         L_discard=L_discard && true;
@@ -179,7 +179,7 @@ bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to,const int in
     if (j != NO_AGENT && u != Q_from[i] && Q_to[j] == nullptr &&
         !funcPIBT(j, Q_from, Q_to, current_idx))
       {
-        if(!cut_constraint) continue;
+        if(!flg_cut_constraint) continue;
         log_content=log_content+"PIBT fail  "; //测试用
         continue;
       }
@@ -193,8 +193,8 @@ bool PIBT::funcPIBT(const int i, const Config &Q_from, Config &Q_to,const int in
   // failed to secure node
   occupied_next[Q_from[i]->id] = i;
   Q_to[i] = Q_from[i];
-  if(cut_constraint && index==-1) runtime_log(3,log_content); //测试用
-  if(cut_constraint && L_discard) L->feasibility.store(false);
+  if(flg_cut_constraint && index==-1) runtime_log(3,log_content); //测试用
+  if(flg_cut_constraint && L_discard) L->feasibility.store(false);
   return false;
 }
 

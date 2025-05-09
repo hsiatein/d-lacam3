@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
   const auto runtime_log_name = program.get<std::string>("runtime-log");
   runtime_log_verbose = std::stoi(program.get<std::string>("runtime-log-verbose"));
   const auto check_feasibility = program.get<bool>("check-feasibility");
-  cut_constraint = program.get<bool>("cut-constraint");
+  flg_cut_constraint = program.get<bool>("cut-constraint");
 
 
   runtime_log_stream.open(runtime_log_name, std::ios::out);

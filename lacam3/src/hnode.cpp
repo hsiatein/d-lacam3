@@ -80,9 +80,7 @@ LNode *HNode::get_next_lowlevel_node(std::mt19937 &MT)
 
   auto L = search_tree.front();
   search_tree.pop();
-  check_lowlevel_feasibility(L);
-  if(cut_constraint) return L;
-  if (L->feasibility && L->depth < C.size()) {
+  if (L->depth < C.size()) {
     auto i = order[L->depth];
     auto cands = C[i]->neighbor;
     cands.push_back(C[i]);
@@ -92,9 +90,30 @@ LNode *HNode::get_next_lowlevel_node(std::mt19937 &MT)
   return L;
 }
 
+LNode *HNode::get_next_lowlevel_node_without_generate()
+{
+  while(true){
+    if (search_tree.empty()) return nullptr;
+
+    auto L = search_tree.front();
+    search_tree.pop();
+    check_lowlevel_feasibility(L);
+    if(!L->feasibility){
+      delete L;
+      discard_constraint_num++;
+      continue;
+    }
+    return L;
+  }
+}
+
 void HNode::generate_lowlevel_node(std::mt19937 &MT, LNode* L)
 {
-  if (L->feasibility && L->depth < C.size()) {
+  if(!L->feasibility){
+    discard_constraint_num++;
+    return;
+  }
+  if (L->depth < C.size()) {
     auto i = order[L->depth];
     auto cands = C[i]->neighbor;
     cands.push_back(C[i]);

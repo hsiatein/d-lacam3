@@ -35,6 +35,7 @@ struct HNode {
   ~HNode();
 
   LNode *get_next_lowlevel_node(std::mt19937 &MT);
+  LNode *get_next_lowlevel_node_without_generate();
   void generate_lowlevel_node(std::mt19937 &MT, LNode* L);
   void check_lowlevel_feasibility(LNode *L);
 };

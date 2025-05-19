@@ -6,6 +6,7 @@ int cut_constraint_level=0;
 int discard_constraint_num=0;
 int generate_fail_continue_num=0;
 int explored_continue_num=0;
+bool flg_undirect_edge=false;
 
 void info(const int level, const int verbose) { std::cout << std::endl; }
 void runtime_log(const int level) { runtime_log_stream << std::endl; }

@@ -60,10 +60,14 @@ Planner::~Planner()
 
 Solution Planner::solve()
 {
+
   info(1, verbose, deadline, "start search");
   update_checkpoints();
 
   // insert initial node
+  for(int i=0;i<V_size;i++){
+    Cluster::occupied.push_back(V_size);
+  }
   H_init = create_highlevel_node(ins->starts, nullptr);
   OPEN.push_front(H_init);
 
@@ -253,12 +257,17 @@ bool Planner::set_new_config(HNode *H, LNode *L, Config &Q_to)
     }
   }
 
+
   if (min_f_val < INT_MAX) {
     auto &Q_win = Q_cands[min_f_val_idx];
     std::copy(Q_win.begin(), Q_win.end(), Q_to.begin());
     return true;
   } else {
     runtime_log(3,deadline,"配置生成失败");
+    runtime_log(3,"开始聚类");
+    Cluster cluster(H->C);
+    // runtime_log(3,"failed agent: ",failed_agent);
+    runtime_log(3,cluster.toString());
     return false;
   }
 }
@@ -270,7 +279,16 @@ void Planner::rewrite(HNode *H_from, HNode *H_to)
 
   // Dijkstra
   std::queue<HNode *> Q({H_from});  // queue is sufficient
+
+  //新加，尝试能不能把双向的neighbor加上
+  if(flg_undirect_edge){
+    H_to->neighbor.insert(H_from);
+    Q.push(H_to);
+  }
+
+  int iter_num=0;
   while (!Q.empty()) {
+    iter_num++;
     auto n_from = Q.front();
     Q.pop();
     for (auto n_to : n_from->neighbor) {
@@ -286,6 +304,7 @@ void Planner::rewrite(HNode *H_from, HNode *H_to)
       }
     }
   }
+  runtime_log(3,deadline,"Dijkstra迭代次数 : ",iter_num);
 }
 
 int Planner::get_edge_cost(const Config &C1, const Config &C2)

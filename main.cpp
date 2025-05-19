@@ -98,6 +98,10 @@ int main(int argc, char *argv[])
   program.add_argument("--cut-constraint")
       .help("level of cut invalid constraint, 0表示不剪枝, 1表示只剪枝约束直接导致的冲突, 2表示在1基础上剪枝一步间接导致的冲突")
       .default_value(std::string("0"));
+  program.add_argument("--undirect-edge")
+      .help("when a hnode explored, build a undirect edge between from and to")
+      .default_value(false)
+      .implicit_value(true);
 
   try {
     program.parse_known_args(argc, argv);
@@ -157,6 +161,7 @@ int main(int argc, char *argv[])
   runtime_log_verbose = std::stoi(program.get<std::string>("runtime-log-verbose"));
   const auto check_feasibility = program.get<bool>("check-feasibility");
   cut_constraint_level = std::stoi(program.get<std::string>("cut-constraint"));
+  flg_undirect_edge=program.get<bool>("undirect-edge");
 
 
   runtime_log_stream.open(runtime_log_name, std::ios::out);

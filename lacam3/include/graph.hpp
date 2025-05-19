@@ -10,8 +10,10 @@ struct Vertex {
   const int x;
   const int y;
   std::vector<Vertex *> neighbor;
+  std::vector<Vertex *> two_ring;
 
   Vertex(int _id, int _index, int _x, int _y);
+  
 };
 using Vertices = std::vector<Vertex *>;
 using Config = std::vector<Vertex *>;  // locations for all agents

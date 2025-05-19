@@ -1,10 +1,12 @@
 #include "../include/pibt.hpp"
 
 int PIBT::TIE_BREAKER=0;
+int PIBT::nextID=0;
 
 PIBT::PIBT(const Instance *_ins, DistTable *_D, int seed, bool _flg_swap,
            Scatter *_scatter)
-    : ins(_ins),
+    : ID(nextID),
+      ins(_ins),
       MT(std::mt19937(seed)),
       N(ins->N),
       V_size(ins->G->size()),
@@ -17,6 +19,7 @@ PIBT::PIBT(const Instance *_ins, DistTable *_D, int seed, bool _flg_swap,
       flg_swap(_flg_swap),
       scatter(_scatter)
 {
+  nextID++;
 }
 
 PIBT::~PIBT() {}
@@ -25,6 +28,7 @@ bool PIBT::set_new_config(const Config &Q_from, Config &Q_to,
                           const std::vector<int> &order)
 {
   bool success = true;
+  std::vector<int> orderOccupy;
   // setup cache & constraints check
   for (auto i = 0; i < N; ++i) {
     // set occupied now
@@ -48,6 +52,22 @@ bool PIBT::set_new_config(const Config &Q_from, Config &Q_to,
         }
       }
       occupied_next[Q_to[i]->id] = i;
+      if(occupied_now[Q_to[i]->id]!=NO_AGENT){
+        orderOccupy.push_back(i);
+      }
+    }
+  }
+
+  int failed_agent=NO_AGENT;
+
+  if (success) {
+    for (auto i : orderOccupy) {
+      if (Q_to[i] == nullptr && !funcPIBT(i, Q_from, Q_to)) {
+        success = false;
+        failed_agent = i;
+        runtime_log(3,"PIBT生成失败:",i);
+        break;
+      }
     }
   }
 
@@ -56,11 +76,13 @@ bool PIBT::set_new_config(const Config &Q_from, Config &Q_to,
     for (auto i : order) {
       if (Q_to[i] == nullptr && !funcPIBT(i, Q_from, Q_to)) {
         success = false;
+        failed_agent = i;
         runtime_log(3,"PIBT生成失败:",i);
         break;
       }
     }
   }
+
 
   // cleanup
   for (auto i = 0; i < N; ++i) {

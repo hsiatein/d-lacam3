@@ -13,8 +13,11 @@
 #include "scatter.hpp"
 #include "utils.hpp"
 #include "lnode.hpp"
+#include "cluster.hpp"
 
 struct PIBT {
+  int ID;
+  static int nextID;
   const Instance *ins;
   std::mt19937 MT;
 

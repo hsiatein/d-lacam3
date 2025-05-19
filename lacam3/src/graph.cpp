@@ -89,6 +89,17 @@ Graph::Graph(const std::string &filename) : V(Vertices()), width(0), height(0)
       }
     }
   }
+
+  for(auto v:V){
+    for(auto nbr:v->neighbor){
+      if(std::find(v->two_ring.begin(),v->two_ring.end(),nbr)==v->two_ring.end()) v->two_ring.push_back(nbr);
+      for(auto nbr2:nbr->neighbor){
+        if(std::find(v->two_ring.begin(),v->two_ring.end(),nbr2)==v->two_ring.end()) v->two_ring.push_back(nbr2);
+      }
+
+    }
+  }
+
 }
 
 int Graph::size() const { return V.size(); }

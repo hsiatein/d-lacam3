@@ -100,3 +100,4 @@ extern int cut_constraint_level;
 extern int discard_constraint_num;
 extern int generate_fail_continue_num;
 extern int explored_continue_num;
+extern bool flg_undirect_edge;

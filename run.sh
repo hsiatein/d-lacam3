@@ -9,7 +9,7 @@
 #map=lak303d&&N=1000
 #map=random-32-32-10-2&&N=485
 #map=random-32-32-10&&N=460
-map=maze-128-128-1&&N=400
+map=maze-128-128-1&&N=200
 #map=room-64-64-8&&N=1000
 #map=w_woundedcoast&&N=1000
 #map=warehouse-20-40-10-2-2&&N=10000
@@ -26,8 +26,8 @@ map=maze-128-128-1&&N=400
 # done
 
 #build/main -i assets/maze-128-128-1.scen -m assets/maze-128-128-1.map -N 450 -v 3 --tie-breaker 4 -s 0 -t 10 --cut-constraint #--no-star --check-feasibility --runtime-log-verbose 3
-seed=14 #72804709
-build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 5 -o log/result.txt --no-scatter --cut-constraint 2 --no-star
-build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 5 -o log/result.txt --no-scatter --cut-constraint 1 --no-star
-build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 5 -o log/result.txt --no-scatter --no-star
-#mapf-visualizer assets/$map.map log/result.txt
+seed=1 #72804709
+build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 3 --runtime-log-verbose 3 -o log/result.txt --no-scatter --cut-constraint 2 #--pibt-num 1 #--undirect-edge #--no-star
+# build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 5 -o log/result.txt --no-scatter --cut-constraint 1 --no-star
+# build/main -i assets/$map.scen -m assets/$map.map -N $N -v 3 --tie-breaker 0 -s $seed -t 5 -o log/result.txt --no-scatter #--no-star
+# mapf-visualizer assets/$map.map log/result.txt
